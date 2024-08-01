@@ -82,7 +82,7 @@ const ProductForm = ({
       <select value={selectCategory} onChange={(e)=>setSelectCategory(e.target.value)}>
         <option value={""}>Ucategorized</option>
         {CatgeoryData.length>0 && CatgeoryData.map(category=>(
-          <option value={category._id}>{category.name}</option>
+          <option key={category._id} value={category._id}>{category.name}</option>
         ))}
       </select>
       <label>Product Photos</label>

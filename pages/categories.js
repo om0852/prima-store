@@ -3,7 +3,7 @@ import Layout from "./components/Layout";
 import axios from "axios";
 import Link from "next/link";
 
-const categories = () => {
+const Categories = () => {
   const [name, setName] = useState("");
   const [editState, setEditState] = useState(null);
   const [categories, setCategories] = useState([]);
@@ -66,7 +66,7 @@ const categories = () => {
           <option value={""}>No Parent Categories</option>
           {!!categories.length > 0 &&
             categories.map((data, index) => (
-              <option value={data._id}>{data.name}</option>
+              <option key={index} value={data._id}>{data.name}</option>
             ))}
         </select>
         <button className="btn-primary py-1" type="submit">
@@ -111,4 +111,4 @@ const categories = () => {
   );
 };
 
-export default categories;
+export default Categories;
