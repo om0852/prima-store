@@ -12,12 +12,13 @@ const ProductForm = ({
   price: existingPrice,
   _id,
   images: existingImage,
+  category:existingCategory
 }) => {
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setDescription] = useState(existingDescription || "");
   const [price, setPrice] = useState(existingPrice || "");
   const [images, setImages] = useState(existingImage || []);
-  const [selectCategory,setSelectCategory]=useState('')
+  const [selectCategory,setSelectCategory]=useState(existingCategory||'')
   const [goToProduct, setGoToProducts] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [CatgeoryData, setCategoryData] = useState([]);
@@ -38,9 +39,10 @@ const ProductForm = ({
         price,
         id: _id,
         images,
+        selectCategory
       });
     } else {
-      await axios.post(`/api/products`, { title, description, price, images });
+      await axios.post(`/api/products`, { title, description, price, images,selectCategory });
     }
     setGoToProducts(true);
   };

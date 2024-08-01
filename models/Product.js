@@ -1,4 +1,4 @@
-import { model, models, Schema } from "mongoose";
+import mongoose, { model, models, Schema } from "mongoose";
 const ModelSchema = new Schema({
   title: {
     type: String,
@@ -9,10 +9,11 @@ const ModelSchema = new Schema({
     type: Number,
     required: true,
   },
-  images:{
-    type:[String]
-  }
+  images: {
+    type: [String],
+  },
+  category: { type: mongoose.Types.ObjectId, ref: "categories" },
 });
 
-const Product  = models.product || model("product",ModelSchema)
-export default Product
+const Product = models.product || model("product", ModelSchema);
+export default Product;
