@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 import React from "react";
 
 const Nav = () => {
-    const pathname = usePathname();
+    const router=useRouter();
+    const {pathname} = router;
     const inactiveLink = 'flex gap-1 p-1'
     const activeLink = inactiveLink + ' bg-white text-blue-900 rounded-l-lg'
   return (
@@ -43,7 +45,7 @@ const Nav = () => {
           </svg>
           Dashboard
         </Link>
-        <Link href={"/orders"} className={pathname=="/orders" ? activeLink:inactiveLink}>
+        <Link href={"/orders"} className={pathname.includes("/orders") ? activeLink:inactiveLink}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -60,7 +62,7 @@ const Nav = () => {
           </svg>
           Orders
         </Link>
-        <Link href={"/products"} className={pathname=="/products" ? activeLink:inactiveLink}>
+        <Link href={"/products"} className={pathname.includes("/products") ? activeLink:inactiveLink}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -77,7 +79,7 @@ const Nav = () => {
           </svg>
           Products
         </Link>
-        <Link href={"/settings"} className={pathname=="/settings" ? activeLink:inactiveLink}>
+        <Link href={"/settings"} className={pathname.includes("/settings") ? activeLink:inactiveLink}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
