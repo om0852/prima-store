@@ -9,6 +9,9 @@ const ModelSchema = new Schema({
     type: Number,
     required: true,
   },
+  images:{
+    type:[String]
+  }
 });
 
 const Product  = models.product || model("product",ModelSchema)

@@ -10,13 +10,17 @@
   },
   "dependencies": {
     "@auth/mongodb-adapter": "^3.4.2",
+    "@aws-sdk/client-s3": "^3.621.0",
     "axios": "^1.7.2",
+    "mime-types": "^2.1.35",
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.2",
+    "multiparty": "^4.2.3",
     "next": "14.2.5",
     "next-auth": "^4.24.7",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "react-spinners": "^0.14.1"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",
