@@ -40,4 +40,17 @@ export default async function handler(req, res) {
       res.json(error.message);
     }
   }
+  if (method == "DELETE") {
+    try {
+    //   console.log(req.body)
+    
+    if (req.query?.id) {
+        const { id } = req.query;
+      await Product.deleteOne({ _id: id });
+    }
+      res.json("Product Delete");
+    } catch (error) {
+      res.json(error.message);
+    }
+  }
 }
