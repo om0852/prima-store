@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import Layout from "@/pages/components/Layout";
 import axios from "axios";
@@ -17,9 +17,18 @@ const ProductForm = ({
   const [description, setDescription] = useState(existingDescription || "");
   const [price, setPrice] = useState(existingPrice || "");
   const [images, setImages] = useState(existingImage || []);
+  const [selectCategory,setSelectCategory]=useState('')
   const [goToProduct, setGoToProducts] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [CatgeoryData, setCategoryData] = useState([]);
   const router = useRouter();
+
+  useEffect(() => {
+    axios
+      .get("/api/categories")
+      .then((res) => setCategoryData(res.data))
+      .catch((error) => console.log(error.message));
+  }, []);
   const saveProduct = async (e) => {
     e.preventDefault();
     if (_id) {
@@ -66,14 +75,31 @@ const ProductForm = ({
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Name"
       />
+
+      <label>Product category</label>
+      <select value={selectCategory} onChange={(e)=>setSelectCategory(e.target.value)}>
+        <option value={""}>Ucategorized</option>
+        {CatgeoryData.length>0 && CatgeoryData.map(category=>(
+          <option value={category._id}>{category.name}</option>
+        ))}
+      </select>
       <label>Product Photos</label>
 
       <div className="mb-2 flex flex-wrap gap-2">
-        <ReactSortable className="flex flex-wrap" list={images} setList={updateImagesOrder}>
+        <ReactSortable
+          className="flex flex-wrap"
+          list={images}
+          setList={updateImagesOrder}
+        >
           {!!images?.length &&
             images.map((link) => (
               <div key={link} className="h-24 w-24">
-                <img className="rounded-lg" src={link} alt="" />
+                <img
+                  className="rounded-lg"
+                  style={{ height: "100%" }}
+                  src={link}
+                  alt=""
+                />
               </div>
             ))}
         </ReactSortable>

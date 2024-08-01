@@ -10,23 +10,26 @@ const categories = () => {
   const [parentcategory, setParentCategory] = useState("");
   const saveCategory = async (e) => {
     e.preventDefault();
-    if(editState){
-      await axios.put("/api/categories", { name, parentcategory,id:editState._id });
-setEditState(null)
+    if (editState) {
+      await axios.put("/api/categories", {
+        name,
+        parentcategory,
+        id: editState._id,
+      });
+      setEditState(null);
+    } else {
+      await axios.post("/api/categories", { name, parentcategory });
     }
-    await axios.post("/api/categories", { name, parentcategory });
     setName("");
     getCategory();
   };
-  const handleDelete = async(id)=>{
-
-const result  = confirm("Are you sure want to delete it");
-if(result){
-  await axios.delete("/api/categories?id="+id);
-  getCategory();
-}
-
-  }
+  const handleDelete = async (id) => {
+    const result = confirm("Are you sure want to delete it");
+    if (result) {
+      await axios.delete("/api/categories?id=" + id);
+      getCategory();
+    }
+  };
   const getCategory = async () => {
     const data = await axios.get("/api/categories");
     setCategories(data.data);
@@ -43,7 +46,9 @@ if(result){
   return (
     <Layout>
       <h1>Categories</h1>
-      <label>{editState ? `Edit Category ${editState.name} ` : "New Catgeory Name"}:</label>
+      <label>
+        {editState ? `Edit Category ${editState.name} ` : "New Catgeory Name"}:
+      </label>
       <form onSubmit={saveCategory} className="flex">
         <input
           type="text"
@@ -54,7 +59,7 @@ if(result){
           placeholder="Category name"
         />
         <select
-        value={parentcategory}
+          value={parentcategory}
           onChange={(e) => setParentCategory(e.target.value)}
           className="mb-0 mr-1"
         >
@@ -65,7 +70,7 @@ if(result){
             ))}
         </select>
         <button className="btn-primary py-1" type="submit">
-          {editState?"Update":"Save"}
+          {editState ? "Update" : "Save"}
         </button>
       </form>
       <table className="basic my-4">
@@ -91,7 +96,12 @@ if(result){
                   >
                     Edit
                   </button>
-                  <button onClick={()=>handleDelete(data._id)} className="btn-primary mr-1">Delete</button>
+                  <button
+                    onClick={() => handleDelete(data._id)}
+                    className="btn-primary mr-1"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             ))}
