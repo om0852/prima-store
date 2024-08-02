@@ -12,13 +12,15 @@ const ProductForm = ({
   price: existingPrice,
   _id,
   images: existingImage,
-  category:existingCategory
+  category: existingCategory,
 }) => {
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setDescription] = useState(existingDescription || "");
   const [price, setPrice] = useState(existingPrice || "");
   const [images, setImages] = useState(existingImage || []);
-  const [selectCategory,setSelectCategory]=useState(existingCategory||"null")
+  const [selectCategory, setSelectCategory] = useState(
+    existingCategory || "null"
+  );
   const [goToProduct, setGoToProducts] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [CatgeoryData, setCategoryData] = useState([]);
@@ -39,10 +41,16 @@ const ProductForm = ({
         price,
         id: _id,
         images,
-        selectCategory
+        selectCategory,
       });
     } else {
-      await axios.post(`/api/products`, { title, description, price, images,selectCategory });
+      await axios.post(`/api/products`, {
+        title,
+        description,
+        price,
+        images,
+        selectCategory,
+      });
     }
     setGoToProducts(true);
   };
@@ -69,11 +77,19 @@ const ProductForm = ({
     setImages(images);
   };
 
-  const propertiesArr=[];
-  if(CatgeoryData.length >0 && selectCategory){
-   const selCatInfo =  CatgeoryData.find(({_id})=> _id===selectCategory);
-   console.log(selCatInfo)
+  const propertiesToFIll = [];
+  if (CatgeoryData.length > 0 && selectCategory) {
+    const selCatInfo = CatgeoryData.find(({ _id }) => _id === selectCategory);
+    // console.log(selCatInfo.parent.properties);
+    if (selCatInfo?.properties) {
+      propertiesToFIll.push(...selCatInfo?.properties);
+      if (selCatInfo?.parent?.properties) {
+        const parent = selCatInfo.parent
+        propertiesToFIll.push(...parent.properties);
+      }
+    }
   }
+
   return (
     <form onSubmit={saveProduct}>
       <label>Product Name</label>
@@ -85,17 +101,20 @@ const ProductForm = ({
       />
 
       <label>Product category</label>
-      <select value={selectCategory} onChange={(e)=>setSelectCategory(e.target.value)}>
+      <select
+        value={selectCategory}
+        onChange={(e) => setSelectCategory(e.target.value)}
+      >
         <option value={"null"}>Ucategorized</option>
-        {CatgeoryData.length>0 && CatgeoryData.map(category=>(
-          <option key={category._id} value={category._id}>{category.name}</option>
-        ))}
+        {CatgeoryData.length > 0 &&
+          CatgeoryData.map((category) => (
+            <option key={category._id} value={category._id}>
+              {category.name}
+            </option>
+          ))}
       </select>
-      {CatgeoryData.length>0 && selectCategory?.properties?.length &&(
-        <div>
-
-        </div>
-      )}
+      {propertiesToFIll.length > 0 &&
+        propertiesToFIll.map((data) => <div>{data.name}</div>)}
       <label>Product Photos</label>
 
       <div className="mb-2 flex flex-wrap gap-2">
