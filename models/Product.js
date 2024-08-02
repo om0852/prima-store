@@ -13,6 +13,7 @@ const ModelSchema = new Schema({
     type: [String],
   },
   category: { type: mongoose.Types.ObjectId, ref: "categories" },
+  properties:{type:Object}
 });
 
 const Product = models.product || model("product", ModelSchema);

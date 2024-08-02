@@ -7,13 +7,14 @@ export default async function handler(req, res) {
   connectToDB();
   if (method === "POST") {
     try {
-      const { title, description, price ,images,selectCategory} = req.body;
+      const { title, description, price ,images,selectCategory,properties} = req.body;
       const productDoc = await Product.create({
         title,
         description,
         price,
         images,
-        category:selectCategory
+        category:selectCategory,
+        properties
       });
       res.json(productDoc);
     } catch (error) {
@@ -34,12 +35,12 @@ export default async function handler(req, res) {
   }
   if (method == "PUT") {
     try {
-      const { title, description, price, id ,images,selectCategory=null} = req.body;
+      const { title, description, price, id ,images,selectCategory=null,properties} = req.body;
       console.log(req.body)
       if(selectCategory=="null"){
-        await Product.updateOne({ _id: id }, { title, description, price,images,category:null });
+        await Product.updateOne({ _id: id }, { title, description, price,images,category:null ,properties});
       }
-      await Product.updateOne({ _id: id }, { title, description, price,images,category:selectCategory });
+      await Product.updateOne({ _id: id }, { title, description, price,images,category:selectCategory,properties });
       res.json("Product Updated");
     } catch (error) {
       res.json(error.message);

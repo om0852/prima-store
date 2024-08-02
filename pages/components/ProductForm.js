@@ -13,10 +13,14 @@ const ProductForm = ({
   _id,
   images: existingImage,
   category: existingCategory,
+  properties: existingProperties,
 }) => {
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setDescription] = useState(existingDescription || "");
   const [price, setPrice] = useState(existingPrice || "");
+  const [productProperties, setProductProperties] = useState(
+    existingProperties || {}
+  );
   const [images, setImages] = useState(existingImage || []);
   const [selectCategory, setSelectCategory] = useState(
     existingCategory || "null"
@@ -42,6 +46,7 @@ const ProductForm = ({
         id: _id,
         images,
         selectCategory,
+        properties: productProperties,
       });
     } else {
       await axios.post(`/api/products`, {
@@ -50,6 +55,7 @@ const ProductForm = ({
         price,
         images,
         selectCategory,
+        properties: productProperties,
       });
     }
     setGoToProducts(true);
@@ -79,17 +85,25 @@ const ProductForm = ({
 
   const propertiesToFIll = [];
   if (CatgeoryData.length > 0 && selectCategory) {
-    const selCatInfo = CatgeoryData.find(({ _id }) => _id === selectCategory);
+    let catInfo = CatgeoryData.find(({ _id }) => _id === selectCategory);
     // console.log(selCatInfo.parent.properties);
-    if (selCatInfo?.properties) {
-      propertiesToFIll.push(...selCatInfo?.properties);
-      if (selCatInfo?.parent?.properties) {
-        const parent = selCatInfo.parent
-        propertiesToFIll.push(...parent.properties);
-      }
+    propertiesToFIll.push(...catInfo?.properties);
+    while (catInfo?.parent?._id) {
+      const parent = CatgeoryData.find(
+        ({ _id }) => _id === catInfo?.parent._id
+      );
+
+      propertiesToFIll.push(...parent.properties);
+      catInfo = parent;
     }
   }
-
+  const setProductProp = (proName, value) => {
+    setProductProperties((prev) => {
+      const newPro = { ...prev };
+      newPro[proName] = value;
+      return newPro;
+    });
+  };
   return (
     <form onSubmit={saveProduct}>
       <label>Product Name</label>
@@ -114,7 +128,19 @@ const ProductForm = ({
           ))}
       </select>
       {propertiesToFIll.length > 0 &&
-        propertiesToFIll.map((data) => <div>{data.name}</div>)}
+        propertiesToFIll.map((data) => (
+          <div className="flex gap-1">
+            <div>{data.name}</div>
+            <select
+              value={productProperties[data.name]}
+              onChange={(e) => setProductProp(data.name, e.target.value)}
+            >
+              {data.values.map((v) => (
+                <option value={v}>{v}</option>
+              ))}
+            </select>
+          </div>
+        ))}
       <label>Product Photos</label>
 
       <div className="mb-2 flex flex-wrap gap-2">
