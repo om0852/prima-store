@@ -19,7 +19,7 @@ label {
   @apply text-blue-900;
 }
 .btn-primary {
-  @apply bg-blue-900 text-white px-4 py-1 rounded-md;
+  @apply bg-blue-500 text-white px-4 py-1 rounded-md;
 }
 table.basic {
   @apply w-full;
@@ -31,14 +31,17 @@ table.basic tr td {
   @apply border border-blue-200 p-1;
 }
 table.basic a {
-  @apply bg-blue-900 text-white text-sm p-1 rounded-md px-2 inline-flex gap-2 flex-row mx-1;
+  @apply bg-blue-500 text-white text-sm p-1 rounded-md px-2 inline-flex gap-2 flex-row mx-1;
+}
+.table.basic button {
+@apply bg-blue-500 text-white
 }
 .btn-red,
 .btn-default {
   @apply px-4 py-1 rounded-md;
 }
 .btn-red {
-  @apply bg-red-800 text-white;
+  @apply bg-red-800 text-black;
 }
 .btn-default {
   @apply bg-gray-500 text-white;

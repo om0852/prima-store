@@ -3,32 +3,25 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/router";
 import React from "react";
+import Logo from "./Logo";
 
-const Nav = () => {
+const Nav = ({showNav}) => {
   const router = useRouter();
   const { pathname } = router;
+  const inactiveIcon="w-6 h-6";
+  const activeIcon=inactiveIcon+" fill-primary"
   const inactiveLink = "flex gap-1 p-1";
-  const activeLink = inactiveLink + " bg-white text-blue-900 rounded-l-lg";
+  const activeLink = inactiveLink + " bg-[#eae8fb] text-blue-900  rounded-sm";
+  async function logout(){
+    await router.push("/");
+    await signOut()
+  }
   return (
-    <aside className="text-white p-4 pr-0">
-      <Link href={"/"} className="flex gap-2 mb-4 mr-4 ">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-6"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
-          />
-        </svg>
-        <span>PrismaStore</span>
-      </Link>
-      <nav className="flex flex-col gap-2">
+    <aside className={(showNav==true?"left-0":"-left-full")+" top-0 text-gray-900 p-4 fixed transition-all duration-150 w-full bg-gray-200 h-full md:static md:w-[18%] md:h-full"}>
+      <div className="mb-4 mr-4">
+        <Logo/>
+      </div>
+      <nav className="flex flex-col gap-2 ">
         <Link
           href={"/"}
           className={pathname == "/" ? activeLink : inactiveLink}
@@ -39,7 +32,8 @@ const Nav = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+              className={pathname.includes("/") ? activeIcon: inactiveIcon}
+
           >
             <path
               strokeLinecap="round"
@@ -59,7 +53,8 @@ const Nav = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+              className={pathname.includes("/orders") ? activeIcon: inactiveIcon}
+
           >
             <path
               strokeLinecap="round"
@@ -79,7 +74,8 @@ const Nav = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+              className={pathname.includes("/products") ? activeIcon: inactiveIcon}
+
           >
             <path
               strokeLinecap="round"
@@ -101,7 +97,8 @@ const Nav = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+              className={pathname.includes("/categories") ? activeIcon: inactiveIcon}
+
           >
             <path
               strokeLinecap="round"
@@ -126,7 +123,8 @@ const Nav = () => {
             viewBox="0 0 24 24"
             strokeWidth="1.5"
             stroke="currentColor"
-            className="size-6"
+              className={pathname.includes("/settings") ? activeIcon: inactiveIcon}
+
           >
             <path
               strokeLinecap="round"
@@ -141,14 +139,15 @@ const Nav = () => {
           </svg>
           Setting
         </Link>
-        <button onClick={()=>signOut()} className={inactiveLink}>
+        <button onClick={()=>{logout()}} className={inactiveLink}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="currentColor"
-            className="size-6"
+              className="size-6"
+
           >
             <path
               strokeLinecap="round"

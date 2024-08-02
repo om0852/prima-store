@@ -28,6 +28,8 @@ export async function isAdminRequest(req, res) {
   if (adminEmails.includes(session?.user?.email)) {
     return true;
   } else {
+    res.status(401);
+    res.end();
     throw new Error("Not a admin");
   }
 }
