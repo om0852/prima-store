@@ -17,11 +17,11 @@ const Categories = () => {
         name,
         parentcategory,
         id: editState._id,
-        properties:properties.map(p=>({name:p.name,values:p.values.split(",")})) 
+        properties:properties
       });
       
     } else {
-      await axios.post("/api/categories", { name, parentcategory, properties:properties.map(p=>({name:p.name,values:p.values.split(",")})) });
+      await axios.post("/api/categories", { name, parentcategory, properties:properties });
     }
     setEditState(null);
     setCategories([]);
@@ -62,7 +62,7 @@ const Categories = () => {
   const handleSetValueProperties = (e, property, index) => {
     setProperties((prev) => {
       const clone = [...prev];
-      clone[index].values = e;
+      clone[index].values = e.split(",");
       return clone;
     });
   };
