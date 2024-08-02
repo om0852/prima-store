@@ -34,8 +34,11 @@ export default async function handler(req, res) {
   }
   if (method == "PUT") {
     try {
-      const { title, description, price, id ,images,selectCategory} = req.body;
-    //   console.log(req.body)
+      const { title, description, price, id ,images,selectCategory=null} = req.body;
+      console.log(req.body)
+      if(selectCategory=="null"){
+        await Product.updateOne({ _id: id }, { title, description, price,images,category:null });
+      }
       await Product.updateOne({ _id: id }, { title, description, price,images,category:selectCategory });
       res.json("Product Updated");
     } catch (error) {

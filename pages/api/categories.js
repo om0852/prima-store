@@ -14,13 +14,13 @@ export default async function handler(req, res) {
   }
   if (method == "POST") {
     try {
-      const { name, parentcategory } = req.body;
+      const { name, parentcategory,properties } = req.body;
       if(parentcategory==''||parentcategory==null){
 
-        await Categories.create({ name });
+        await Categories.create({ name,properties });
       }
       else{
-        await Categories.create({ name:name, parent: parentcategory });
+        await Categories.create({ name:name, parent: parentcategory ,properties});
       }
       return res.json("Category Created");
     } catch (error) {
@@ -29,8 +29,8 @@ export default async function handler(req, res) {
   }
   if (method == "PUT") {
     try {
-      const { name, id ,parentcategory} = req.body;
-      await Categories.updateOne({ _id: id }, { name,parent:parentcategory });
+      const { name, id ,parentcategory,properties} = req.body;
+      await Categories.updateOne({ _id: id }, { name,parent:parentcategory,properties });
       return res.json("updated");
     } catch (error) {
       return res.json(error.message);

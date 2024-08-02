@@ -18,7 +18,7 @@ const ProductForm = ({
   const [description, setDescription] = useState(existingDescription || "");
   const [price, setPrice] = useState(existingPrice || "");
   const [images, setImages] = useState(existingImage || []);
-  const [selectCategory,setSelectCategory]=useState(existingCategory||'')
+  const [selectCategory,setSelectCategory]=useState(existingCategory||"null")
   const [goToProduct, setGoToProducts] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [CatgeoryData, setCategoryData] = useState([]);
@@ -80,7 +80,7 @@ const ProductForm = ({
 
       <label>Product category</label>
       <select value={selectCategory} onChange={(e)=>setSelectCategory(e.target.value)}>
-        <option value={""}>Ucategorized</option>
+        <option value={"null"}>Ucategorized</option>
         {CatgeoryData.length>0 && CatgeoryData.map(category=>(
           <option key={category._id} value={category._id}>{category.name}</option>
         ))}
