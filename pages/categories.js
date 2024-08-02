@@ -117,7 +117,7 @@ const Categories = () => {
           </button>
           {properties.length > 0 &&
             properties.map((property, index) => (
-              <div className="flex h-10 gap-1 mb-2">
+              <div key={index} className="flex h-10 gap-1 mb-2">
                 <input
                   type="text"
                   value={property.name}

@@ -129,15 +129,15 @@ const ProductForm = ({
           ))}
       </select>
       {propertiesToFIll.length > 0 &&
-        propertiesToFIll.map((data) => (
-          <div className="">
+        propertiesToFIll.map((data,index) => (
+          <div className="" key={index}>
             <label className=" capitalize h-auto mr-1">{data.name}</label>
             <select
               value={productProperties[data.name]}
               onChange={(e) => setProductProp(data.name, e.target.value)}
             >
-              {data.values.map((v) => (
-                <option value={v}>{v}</option>
+              {data.values.map((v,index) => (
+                <option key={index} value={v}>{v}</option>
               ))}
             </select>
           </div>
