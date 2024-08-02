@@ -86,15 +86,17 @@ const ProductForm = ({
   const propertiesToFIll = [];
   if (CatgeoryData.length > 0 && selectCategory) {
     let catInfo = CatgeoryData.find(({ _id }) => _id === selectCategory);
-    // console.log(selCatInfo.parent.properties);
-    propertiesToFIll.push(...catInfo?.properties);
-    while (catInfo?.parent?._id) {
+    if(catInfo){
+
+      propertiesToFIll.push(...catInfo?.properties);
+      while (catInfo?.parent?._id) {
       const parent = CatgeoryData.find(
         ({ _id }) => _id === catInfo?.parent._id
       );
 
       propertiesToFIll.push(...parent.properties);
       catInfo = parent;
+    }
     }
   }
   const setProductProp = (proName, value) => {
