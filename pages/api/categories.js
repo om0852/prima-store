@@ -30,7 +30,14 @@ export default async function handler(req, res) {
   if (method == "PUT") {
     try {
       const { name, id ,parentcategory,properties} = req.body;
-      await Categories.updateOne({ _id: id }, { name,parent:parentcategory,properties });
+      console.log(req.body)
+      if(parentcategory!='null'){
+
+        await Categories.updateOne({ _id: id }, { name,parent:parentcategory,properties });
+      }
+      else{
+        await Categories.updateOne({ _id: id }, { name,properties });
+      }
       return res.json("updated");
     } catch (error) {
       return res.json(error.message);

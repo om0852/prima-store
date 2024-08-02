@@ -68,6 +68,12 @@ const ProductForm = ({
   const updateImagesOrder = (images) => {
     setImages(images);
   };
+
+  const propertiesArr=[];
+  if(CatgeoryData.length >0 && selectCategory){
+   const selCatInfo =  CatgeoryData.find(({_id})=> _id===selectCategory);
+   console.log(selCatInfo)
+  }
   return (
     <form onSubmit={saveProduct}>
       <label>Product Name</label>
@@ -85,6 +91,11 @@ const ProductForm = ({
           <option key={category._id} value={category._id}>{category.name}</option>
         ))}
       </select>
+      {CatgeoryData.length>0 && selectCategory?.properties?.length &&(
+        <div>
+
+        </div>
+      )}
       <label>Product Photos</label>
 
       <div className="mb-2 flex flex-wrap gap-2">
