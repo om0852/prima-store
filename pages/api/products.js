@@ -1,20 +1,25 @@
 import { connectToDB } from "@/lib/connect";
 import Product from "@/models/Product";
+import { getServerSession } from "next-auth";
 import { Elsie_Swash_Caps } from "next/font/google";
+import { authOptions, isAdminRequest } from "./auth/[...nextauth]";
 
 export default async function handler(req, res) {
   const { method } = req;
   connectToDB();
+const admin  = await  isAdminRequest(req,res);
+console.log(admin)
   if (method === "POST") {
     try {
-      const { title, description, price ,images,selectCategory,properties} = req.body;
+      const { title, description, price, images, selectCategory, properties } =
+        req.body;
       const productDoc = await Product.create({
         title,
         description,
         price,
         images,
-        category:selectCategory,
-        properties
+        category: selectCategory,
+        properties,
       });
       res.json(productDoc);
     } catch (error) {
@@ -35,12 +40,33 @@ export default async function handler(req, res) {
   }
   if (method == "PUT") {
     try {
-      const { title, description, price, id ,images,selectCategory=null,properties} = req.body;
-      console.log(req.body)
-      if(selectCategory=="null"){
-        await Product.updateOne({ _id: id }, { title, description, price,images,category:null ,properties});
+      const {
+        title,
+        description,
+        price,
+        id,
+        images,
+        selectCategory = null,
+        properties,
+      } = req.body;
+      console.log(req.body);
+      if (selectCategory == "null") {
+        await Product.updateOne(
+          { _id: id },
+          { title, description, price, images, category: null, properties }
+        );
       }
-      await Product.updateOne({ _id: id }, { title, description, price,images,category:selectCategory,properties });
+      await Product.updateOne(
+        { _id: id },
+        {
+          title,
+          description,
+          price,
+          images,
+          category: selectCategory,
+          properties,
+        }
+      );
       res.json("Product Updated");
     } catch (error) {
       res.json(error.message);
@@ -48,12 +74,12 @@ export default async function handler(req, res) {
   }
   if (method == "DELETE") {
     try {
-    //   console.log(req.body)
-    
-    if (req.query?.id) {
+      //   console.log(req.body)
+
+      if (req.query?.id) {
         const { id } = req.query;
-      await Product.deleteOne({ _id: id });
-    }
+        await Product.deleteOne({ _id: id });
+      }
       res.json("Product Delete");
     } catch (error) {
       res.json(error.message);
