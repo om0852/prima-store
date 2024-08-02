@@ -18,11 +18,11 @@ const Products = () => {
     <Layout>
       <Link
         href={"/products/new"}
-        className=" text-white py-1 px-2 rounded-md bg-blue-800"
+        className=" text-white py-2 px-4 my-2 bg-blue-800"
       >
         Add new product
       </Link>
-      <table className="basic mt-2">
+      <table className="basic mt-4">
         <thead>
           <tr>
             <td>Product Name</td>

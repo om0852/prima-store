@@ -17,7 +17,7 @@ const Nav = ({showNav}) => {
     await signOut()
   }
   return (
-    <aside className={(showNav==true?"left-0":"-left-full")+" top-0 text-gray-900 p-4 fixed transition-all duration-150 w-full bg-gray-200 h-full md:static md:w-[18%] md:h-full"}>
+    <aside className={(showNav==true?"left-0":"-left-full")+" top-0 text-gray-900 p-4 fixed transition-all duration-150 w-full bg-gray-100 h-full md:static md:w-[18%] md:h-full"}>
       <div className="mb-4 mr-4">
         <Logo/>
       </div>

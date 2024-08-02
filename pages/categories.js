@@ -111,13 +111,13 @@ const Categories = () => {
           <button
             onClick={addProperty}
             type="button"
-            className="btn-default p-0 text-sm mb-2"
+            className="btn-default  p-0 text-sm mb-2"
           >
             Add new Property
           </button>
           {properties.length > 0 &&
             properties.map((property, index) => (
-              <div className="flex gap-1 mb-2">
+              <div className="flex h-10 gap-1 mb-2">
                 <input
                   type="text"
                   value={property.name}
@@ -135,7 +135,7 @@ const Categories = () => {
                   placeholder="Property Values (Seperated by comma)"
                 />
                 <button
-                  className="btn-default"
+                  className="btn-red"
                   type="button"
                   onClick={() => removeProperty(index)}
                 >
@@ -179,7 +179,7 @@ const Categories = () => {
                   <td>{data?.parent?.name}</td>
                   <td>
                     <button
-                      className="btn-primary mr-1"
+                      className="btn-primary-gray mr-1"
                       onClick={() => {
                         editCategory(data);
                       }}
@@ -188,7 +188,7 @@ const Categories = () => {
                     </button>
                     <button
                       onClick={() => handleDelete(data._id)}
-                      className="btn-primary mr-1"
+                      className="btn-red mr-1"
                     >
                       Delete
                     </button>

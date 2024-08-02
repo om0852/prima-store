@@ -24,12 +24,12 @@ const Layout = ({ children }) => {
 
   return (
     <div className="bg-gray-100 text-black min-h-screen h-screen">
-      <div className="block md:hidden flex items-center">
+      <div className="h-10  flex flex-row justify-center items-center md:hidden">
         <button
           onClick={() => {
             setShowNav(true);
           }}
-          className=" block  md:hidden"
+          className=" block  md:hidden mx-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

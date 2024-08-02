@@ -86,17 +86,16 @@ const ProductForm = ({
   const propertiesToFIll = [];
   if (CatgeoryData.length > 0 && selectCategory) {
     let catInfo = CatgeoryData.find(({ _id }) => _id === selectCategory);
-    if(catInfo){
-
+    if (catInfo) {
       propertiesToFIll.push(...catInfo?.properties);
       while (catInfo?.parent?._id) {
-      const parent = CatgeoryData.find(
-        ({ _id }) => _id === catInfo?.parent._id
-      );
+        const parent = CatgeoryData.find(
+          ({ _id }) => _id === catInfo?.parent._id
+        );
 
-      propertiesToFIll.push(...parent.properties);
-      catInfo = parent;
-    }
+        propertiesToFIll.push(...parent.properties);
+        catInfo = parent;
+      }
     }
   }
   const setProductProp = (proName, value) => {
@@ -131,8 +130,8 @@ const ProductForm = ({
       </select>
       {propertiesToFIll.length > 0 &&
         propertiesToFIll.map((data) => (
-          <div className="flex gap-1">
-            <div>{data.name}</div>
+          <div className="">
+            <label className=" capitalize h-auto mr-1">{data.name}</label>
             <select
               value={productProperties[data.name]}
               onChange={(e) => setProductProp(data.name, e.target.value)}
@@ -153,7 +152,10 @@ const ProductForm = ({
         >
           {!!images?.length &&
             images.map((link) => (
-              <div key={link} className="h-24 w-24">
+              <div
+                key={link}
+                className="h-24 mx-1 bg-white p-4 shadow-sm border-2 border-gray-200 rounded-md"
+              >
                 <img
                   className="rounded-lg"
                   style={{ height: "100%" }}
@@ -176,7 +178,7 @@ const ProductForm = ({
         )}
         <label
           htmlFor="photo"
-          className="w-24 h-24  text-center flex gap-1 text-gray-500 rounded-lg bg-gray-300 flex-col items-center justify-center"
+          className="w-24 h-24  text-center flex gap-1 text-purple-800 rounded-lg bg-white shadow-sm border-purple-200  border-2 flex-col items-center justify-center"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -192,7 +194,7 @@ const ProductForm = ({
               d="M9 8.25H7.5a2.25 2.25 0 0 0-2.25 2.25v9a2.25 2.25 0 0 0 2.25 2.25h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25H15m0-3-3-3m0 0-3 3m3-3V15"
             />
           </svg>
-          <div>Upload</div>
+          <div>Add Image</div>
         </label>
         {/* {!images?.length && <div>No Photos in this product</div>}
         {images?.map((img) => (
