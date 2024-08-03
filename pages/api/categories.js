@@ -18,7 +18,8 @@ export default async function handler(req, res) {
   if (method == "POST") {
     try {
       const { name, parentcategory, properties } = req.body;
-      if (parentcategory == "" || parentcategory == null) {
+      console.log(req.body)
+      if (parentcategory == "" || parentcategory == "null") {
         await Categories.create({ name, properties });
       } else {
         await Categories.create({

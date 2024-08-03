@@ -14,7 +14,8 @@ const ModelSchema = new Schema({
   },
   category: { type: mongoose.Types.ObjectId, ref: "categories" },
   properties:{type:Object}
-});
+},  { timestamps: true }
+);
 
 const Product = models.product || model("product", ModelSchema);
 export default Product;
