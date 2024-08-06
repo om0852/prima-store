@@ -166,9 +166,9 @@ const Categories = () => {
         <table className="basic my-4">
           <thead>
             <tr>
-              <td>Category name</td>
-              <td>Parent Category</td>
-              <td></td>
+              <th>Category name</th>
+              <th>Parent Category</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>

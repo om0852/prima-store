@@ -27,7 +27,7 @@ label {
 table.basic {
   @apply w-full;
 }
-table.basic thead tr td {
+table.basic thead tr th {
   @apply text-gray-600 uppercase text-sm;
 }
 table.basic tr td {
