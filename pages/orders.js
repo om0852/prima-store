@@ -20,17 +20,20 @@ const Orders = () => {
         <thead>
           <tr className="shadow-md p-1">
             <th>Date</th>
+            <th>Paid</th>
             <th>Recipient</th>
             <th>Products</th>
           </tr>
         </thead>
         <tbody>
           {orderData.length > 0 &&
-            orderData.map((order) => (
-              <tr>
-                <td>{order.createdAt}</td>
+            orderData.map((order,index) => (
+              <tr key={index}>
+                <td>{new Date(order.createdAt).toLocaleString()}</td>
+                <td className={order.paid?"text-green-600":"text-red-600"}>{order.paid?"Yes":"No"}</td>
                 <td>
-                  {order.name}<br/>
+                  {order.name}
+                  <br />
                   {order.email}
                   <br></br>
                   {order.street_address}
@@ -42,13 +45,14 @@ const Orders = () => {
                   {order.country}
                 </td>
 
-                <td>{
- order.line_items.map(l=>(
-    <>
-    {l.title}x{l.quantity}<br/>
-    </>
- ))               
-}</td>
+                <td>
+                  {order.line_items.map((l,index) => (
+                    <span key={index}>
+                      {l.title}x{l.quantity}
+                      <br />
+                    </span>
+                  ))}
+                </td>
               </tr>
             ))}
         </tbody>
