@@ -121,7 +121,8 @@ const Orders = () => {
                       </button>
                     </div>
                   ) : (
-                    <div className=" grid place-items-center">
+                    <>
+{         order.orderState=="Confirm"?           <div className=" grid place-items-center">
                       <p>Order Confirm</p>
                       <div className="fixed top-[-200vh] right-[-100vh]">
                         {" "}
@@ -135,7 +136,9 @@ const Orders = () => {
                       >
                         Print Invoice
                       </button>
-                    </div>
+                    </div>:<p className="w-full text-center">Order Rejected</p>
+}
+</>
                   )}
                 </td>
               </tr>
