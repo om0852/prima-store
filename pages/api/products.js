@@ -7,16 +7,24 @@ import { authOptions, isAdminRequest } from "./auth/[...nextauth]";
 export default async function handler(req, res) {
   const { method } = req;
   connectToDB();
-const admin  = await  isAdminRequest(req,res);
-console.log(admin)
+  const admin = await isAdminRequest(req, res);
+  console.log(admin);
   if (method === "POST") {
     try {
-      const { title, description, price, images, selectCategory, properties } =
-        req.body;
+      const {
+        title,
+        description,
+        price,
+        images,
+        selectCategory,
+        properties,
+        delivery_charges,
+      } = req.body;
       const productDoc = await Product.create({
         title,
         description,
         price,
+        delivery_charges,
         images,
         category: selectCategory,
         properties,
@@ -45,6 +53,7 @@ console.log(admin)
         description,
         price,
         id,
+        delivery_charges,
         images,
         selectCategory = null,
         properties,
@@ -53,7 +62,15 @@ console.log(admin)
       if (selectCategory == "null") {
         await Product.updateOne(
           { _id: id },
-          { title, description, price, images, category: null, properties }
+          {
+            title,
+            description,
+            price,
+            images,
+            category: null,
+            properties,
+            delivery_charges,
+          }
         );
       }
       await Product.updateOne(
@@ -65,6 +82,7 @@ console.log(admin)
           images,
           category: selectCategory,
           properties,
+          delivery_charges,
         }
       );
       res.json("Product Updated");

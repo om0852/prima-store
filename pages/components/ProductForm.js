@@ -14,10 +14,12 @@ const ProductForm = ({
   images: existingImage,
   category: existingCategory,
   properties: existingProperties,
+  delivery_charges:edelivery_charges
 }) => {
   const [title, setTitle] = useState(existingTitle || "");
   const [description, setDescription] = useState(existingDescription || "");
   const [price, setPrice] = useState(existingPrice || "");
+  const [delivery_charges, setDeliveryCharges] = useState(edelivery_charges || "");
   const [productProperties, setProductProperties] = useState(
     existingProperties || {}
   );
@@ -46,6 +48,7 @@ const ProductForm = ({
         id: _id,
         images,
         selectCategory,
+        delivery_charges,
         properties: productProperties,
       });
     } else {
@@ -55,6 +58,7 @@ const ProductForm = ({
         price,
         images,
         selectCategory,
+        delivery_charges,
         properties: productProperties,
       });
     }
@@ -207,12 +211,20 @@ const ProductForm = ({
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       ></textarea>
-      <label>Product Price(in USD)</label>
+      <label>Product Price(in INR)</label>
       <input
         type="number"
         value={price}
         onChange={(e) => setPrice(e.target.value)}
         placeholder="Price"
+      />
+      <label>Delivery Charges Price(in INR)</label>
+      <input
+        type="number"
+        value={delivery_charges}
+        name="delivery_charges"
+        onChange={(e) => setDeliveryCharges(e.target.value)}
+        placeholder="Delivery Charges"
       />
       <button type="submit" className="btn-primary">
         Save
