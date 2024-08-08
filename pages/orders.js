@@ -6,6 +6,8 @@ import { useReactToPrint } from "react-to-print";
 
 const Orders = () => {
   const [orderData, setOrderData] = useState([]);
+  const [selectOption, setSelectOption] = useState("All");
+  const [search, setSearch] = useState("");
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({
@@ -17,12 +19,12 @@ const Orders = () => {
 
   useEffect(() => {
     axios
-      .get("/api/orders")
+      .get("/api/orders?search="+search+"&select="+selectOption)
       .then((response) => {
         setOrderData(response.data);
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [search,selectOption]);
 
   const confirmYes = (index) => {
     axios.post("/api/confirmorder", {
@@ -40,7 +42,26 @@ const Orders = () => {
 
   return (
     <Layout>
-      <h1>Orders</h1>
+      <div className="flex justify-between flex-row px-4">
+        <h1>Orders</h1>
+        <input
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+          type="text"
+          className="w-[50vh]"
+          placeholder="Search"
+        />
+        <select
+          value={selectOption}
+          className="w-[30vh]"
+          onChange={(e) => setSelectOption(e.target.value)}
+        >
+          <option value={"All"}>All</option>
+          <option value={"Confirm"}>Confirm</option>
+          <option value={"Rejected"}>Rejected</option>
+          <option value={"Pending"}>Pending</option>
+        </select>
+      </div>
       <table className="basic mt-4">
         <thead>
           <tr className="shadow-md p-1">
@@ -100,11 +121,18 @@ const Orders = () => {
                       </button>
                     </div>
                   ) : (
-                    <div>
+                    <div className=" grid place-items-center">
                       <p>Order Confirm</p>
-                     <div className="fixed top-[-200vh] right-[-100vh]"> <Invoice {...order} ref={componentRef} /></div>
-                     
-                      <button type="button" className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900" onClick={() => handlePrint()}>
+                      <div className="fixed top-[-200vh] right-[-100vh]">
+                        {" "}
+                        <Invoice {...order} ref={componentRef} />
+                      </div>
+
+                      <button
+                        type="button"
+                        className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+                        onClick={() => handlePrint()}
+                      >
                         Print Invoice
                       </button>
                     </div>

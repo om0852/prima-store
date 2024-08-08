@@ -10,7 +10,7 @@ export default async function (req, res) {
     console.log(orderData.line_items);
     const updatedOrder = await Order.findByIdAndUpdate(
       {_id:id},
-      { line_items: orderData.line_items },
+      { line_items: orderData.line_items,orderState:data.state?"Confirm":"Rejected" },
       { new: true }
     );
     // console.log('Order updated:', updatedOrder);

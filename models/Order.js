@@ -13,6 +13,7 @@ const ModelSchema = new Schema({
     country:String,
     state:String,
     number:Number,
+    orderState:{type:String,default:"Pending"},
     paid:{type:Boolean,default:false},
     order_id:String,
 
