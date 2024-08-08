@@ -1,9 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Layout from "./components/Layout";
 import axios from "axios";
+import Invoice from "./components/Invoice";
+import { useReactToPrint } from "react-to-print";
 
 const Orders = () => {
   const [orderData, setOrderData] = useState([]);
+  const componentRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: "Print This Document",
+    onBeforePrint: () => console.log("before printing..."),
+    onAfterPrint: () => console.log("after printing..."),
+  });
+
   useEffect(() => {
     axios
       .get("/api/orders")
@@ -12,18 +23,21 @@ const Orders = () => {
       })
       .catch((err) => console.log(err));
   }, []);
+
   const confirmYes = (index) => {
     axios.post("/api/confirmorder", {
       data: { state: true, date: new Date() },
       id: orderData[index]._id,
     });
   };
+
   const confirmNo = (index) => {
     axios.post("/api/confirmorder", {
       data: { state: false, date: new Date() },
       id: orderData[index]._id,
     });
   };
+
   return (
     <Layout>
       <h1>Orders</h1>
@@ -68,29 +82,32 @@ const Orders = () => {
                   ))}
                 </td>
                 <td className="px-4">
-                  {order?.line_items?.[0]?.OrderState?.length == 0 ? (
+                  {order?.line_items?.[0]?.OrderState?.length === 0 ? (
                     <div className="flex flex-row justify-between px-4">
                       <button
                         onClick={() => confirmYes(index1)}
                         type="button"
-                        class="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                        className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                       >
                         Yes
                       </button>
                       <button
                         onClick={() => confirmNo(index1)}
                         type="button"
-                        class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                        className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                       >
                         No
                       </button>
                     </div>
                   ) : (
-                    <h1>
-                      {order?.line_items?.[0].OrderState?.[0].state == true
-                        ? "Order Confirm"
-                        : "Order Cancel"}
-                    </h1>
+                    <div>
+                      <p>Order Confirm</p>
+                     <div className="fixed top-[-200vh] right-[-100vh]"> <Invoice {...order} ref={componentRef} /></div>
+                     
+                      <button type="button" className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900" onClick={() => handlePrint()}>
+                        Print Invoice
+                      </button>
+                    </div>
                   )}
                 </td>
               </tr>
