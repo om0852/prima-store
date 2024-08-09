@@ -68,7 +68,7 @@ const Settings = () => {
           {emailData &&
             emailData.map((data, index) => {
               return (
-                <tr>
+                <tr key={index}>
                   <td>{data.email}</td>
                   <td>{data.type}</td>
                   <td className="flex flex-row items-center justify-around px-4">

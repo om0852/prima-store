@@ -3,11 +3,13 @@ import Layout from "./components/Layout";
 import axios from "axios";
 import Invoice from "./components/Invoice";
 import { useReactToPrint } from "react-to-print";
+import Loader from "./components/Loader";
 
 const Orders = () => {
   const [orderData, setOrderData] = useState([]);
   const [selectOption, setSelectOption] = useState("All");
   const [search, setSearch] = useState("");
+  const [loader, setLoader] = useState(false);
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({
@@ -16,14 +18,19 @@ const Orders = () => {
     onBeforePrint: () => console.log("before printing..."),
     onAfterPrint: () => console.log("after printing..."),
   });
-
-  useEffect(() => {
+  const fetchOrder = async () => {
+    setLoader(true);
     axios
       .get("/api/orders?search=" + search + "&select=" + selectOption)
       .then((response) => {
         setOrderData(response.data);
       })
       .catch((err) => console.log(err));
+    setLoader(false);
+  };
+
+  useEffect(() => {
+    fetchOrder();
   }, [search, selectOption]);
 
   const confirmYes = (index) => {
@@ -31,6 +38,7 @@ const Orders = () => {
       data: { state: true, date: new Date() },
       id: orderData[index]._id,
     });
+    fetchOrder();
   };
 
   const confirmNo = (index) => {
@@ -38,10 +46,12 @@ const Orders = () => {
       data: { state: false, date: new Date() },
       id: orderData[index]._id,
     });
+    fetchOrder();
   };
 
   return (
     <Layout>
+      {loader && <Loader />}{" "}
       <div className="flex justify-between flex-row px-4">
         <h1>Orders</h1>
         <input

@@ -1,28 +1,38 @@
 import React, { useEffect, useState } from "react";
 import Header from "./components/Header";
 import axios from "axios";
+import Loader from "./components/Loader";
 
 const Shipper = () => {
   const [orderData, setOrderData] = useState([]);
   const [selectOption, setSelectOption] = useState("All");
   const [search, setSearch] = useState("");
-  useEffect(() => {
+  const [loader, setLoader] = useState(false);
+
+  const fetchOrder = () => {
+    setLoader(true);
     axios
       .get("/api/shipperorder?search=" + search + "&select=" + selectOption)
       .then((response) => {
         setOrderData(response.data);
       })
       .catch((err) => console.log(err));
+    setLoader(true);
+  };
+
+  useEffect(() => {
+    fetchOrder();
   }, [search, selectOption]);
   const confirmYes = (index) => {
     axios.post("/api/confirmshipper", {
       data: { state: true, date: new Date() },
       id: orderData[index]._id,
     });
+    fetchOrder();
   };
   return (
     <div>
-      <Header />
+      {loader && <Loader />} <Header />
       <div className="flex justify-between flex-row px-4 py-4">
         <h1>Orders</h1>
         <input
@@ -84,7 +94,9 @@ const Shipper = () => {
                   ))}
                 </td>
                 <td className="px-4">
-                  {order?.orderState.length >0  && (order?.orderState?.[1]?.state!="Confirm" && order?.orderState?.[1]?.state!="Rejected") ? (
+                  {order?.orderState.length > 0 &&
+                  order?.orderState?.[1]?.state != "Confirm" &&
+                  order?.orderState?.[1]?.state != "Rejected" ? (
                     <div className="flex flex-row justify-between px-4">
                       <button
                         onClick={() => confirmYes(index1)}
@@ -93,14 +105,21 @@ const Shipper = () => {
                       >
                         Pick The Order
                       </button>
-                     
                     </div>
                   ) : (
                     <>
-                      {order?.orderState?.length>0 &&order.orderState[1].state == "Confirm" ? (
+                      {order?.orderState?.length > 0 &&
+                      order.orderState[1].state == "Confirm" ? (
                         <div className=" grid place-items-center">
-                          <p>Order Pick On {new Date(order.orderState[1].date).toLocaleDateString()} {new Date(order.orderState[1].date).toLocaleTimeString()}</p>
-                        
+                          <p>
+                            Order Pick On{" "}
+                            {new Date(
+                              order.orderState[1].date
+                            ).toLocaleDateString()}{" "}
+                            {new Date(
+                              order.orderState[1].date
+                            ).toLocaleTimeString()}
+                          </p>
                         </div>
                       ) : (
                         <p className="w-full text-center">Order Rejected</p>

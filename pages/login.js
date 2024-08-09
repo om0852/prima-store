@@ -1,8 +1,9 @@
+"use client"
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React from "react";
 
-const login = () => {
+const Login = () => {
   const { data: session } = useSession();
   const router = useRouter();
   if (!session) {
@@ -27,9 +28,9 @@ const login = () => {
       </div>
     );
   } else {
-    // router.push("/")
+    router.push("/")
   }
   return <div></div>;
 };
 
-export default login;
+export default Login;

@@ -1,33 +1,44 @@
 import React, { useEffect, useState } from "react";
 import Header from "./components/Header";
 import axios from "axios";
+import Loader from "./components/Loader";
 
 const Delivery = () => {
   const [orderData, setOrderData] = useState([]);
   const [selectOption, setSelectOption] = useState("All");
   const [search, setSearch] = useState("");
-  useEffect(() => {
+  const [loader, setLoader] = useState(false);
+
+  const fetchOrder = () => {
+    setLoader(true);
     axios
       .get("/api/deliveryorder?search=" + search + "&select=" + selectOption)
       .then((response) => {
         setOrderData(response.data);
       })
       .catch((err) => console.log(err));
+    setLoader(false);
+  };
+  useEffect(() => {
+    fetchOrder();
   }, [search, selectOption]);
   const confirmYes = (index) => {
     axios.post("/api/confirmdelivery", {
       data: { state: true, date: new Date() },
       id: orderData[index]._id,
     });
+    fetchOrder();
   };
   const confirmDelivered = (index) => {
     axios.post("/api/confirmdelivery", {
       data: { state: true, date: new Date() },
       id: orderData[index]._id,
     });
+    fetchOrder();
   };
   return (
     <div>
+        {loader && <Loader/>}
       <Header />
       <div className="flex justify-between flex-row px-4 py-4">
         <h1>Orders</h1>
@@ -117,8 +128,13 @@ const Delivery = () => {
                             ).toLocaleTimeString()}
                           </p>
                           {order?.orderState?.length > 2 &&
-                          (order?.orderState[3]?.state == "Confirm" ||order?.orderState[3]?.state == "Rejected") ? (
-                            <p>{order?.orderState[3]?.state == "Confirm"?"Order Delivered":"Order Cancel"} </p>
+                          (order?.orderState[3]?.state == "Confirm" ||
+                            order?.orderState[3]?.state == "Rejected") ? (
+                            <p>
+                              {order?.orderState[3]?.state == "Confirm"
+                                ? "Order Delivered"
+                                : "Order Cancel"}{" "}
+                            </p>
                           ) : (
                             <button
                               onClick={() => confirmDelivered(index1)}
