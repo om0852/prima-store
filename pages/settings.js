@@ -33,7 +33,6 @@ const Settings = () => {
       axios.put("/api/adduser?id=" + editAdminState._id, { email, type });
     }
     getUsers();
-
     setAdminState(null);
   };
   return (

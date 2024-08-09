@@ -1,48 +1,35 @@
-import React, { useEffect, useRef, useState } from "react";
-import Layout from "./components/Layout";
+import React, { useEffect, useState } from "react";
+import Header from "./components/Header";
 import axios from "axios";
-import Invoice from "./components/Invoice";
-import { useReactToPrint } from "react-to-print";
 
-const Orders = () => {
+const Delivery = () => {
   const [orderData, setOrderData] = useState([]);
   const [selectOption, setSelectOption] = useState("All");
   const [search, setSearch] = useState("");
-  const componentRef = useRef();
-
-  const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
-    documentTitle: "Print This Document",
-    onBeforePrint: () => console.log("before printing..."),
-    onAfterPrint: () => console.log("after printing..."),
-  });
-
   useEffect(() => {
     axios
-      .get("/api/orders?search=" + search + "&select=" + selectOption)
+      .get("/api/deliveryorder?search=" + search + "&select=" + selectOption)
       .then((response) => {
         setOrderData(response.data);
       })
       .catch((err) => console.log(err));
   }, [search, selectOption]);
-
   const confirmYes = (index) => {
-    axios.post("/api/confirmorder", {
+    axios.post("/api/confirmdelivery", {
       data: { state: true, date: new Date() },
       id: orderData[index]._id,
     });
   };
-
-  const confirmNo = (index) => {
-    axios.post("/api/confirmorder", {
-      data: { state: false, date: new Date() },
+  const confirmDelivered = (index) => {
+    axios.post("/api/confirmdelivery", {
+      data: { state: true, date: new Date() },
       id: orderData[index]._id,
     });
   };
-
   return (
-    <Layout>
-      <div className="flex justify-between flex-row px-4">
+    <div>
+      <Header />
+      <div className="flex justify-between flex-row px-4 py-4">
         <h1>Orders</h1>
         <input
           onChange={(e) => setSearch(e.target.value)}
@@ -65,21 +52,21 @@ const Orders = () => {
       <table className="basic mt-4">
         <thead>
           <tr className="shadow-md p-1">
+            <th>ID</th>
             <th>Date</th>
-            <th>Paid</th>
             <th>Recipient</th>
             <th>Products</th>
-            <th>Confirm</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           {orderData.length > 0 &&
             orderData.map((order, index1) => (
               <tr key={index1}>
-                <td>{new Date(order.createdAt).toLocaleString()}</td>
                 <td className={order.paid ? "text-green-600" : "text-red-600"}>
-                  {order.paid ? "Yes" : "No"}
+                  {order._id}
                 </td>
+                <td>{new Date(order.createdAt).toLocaleString()}</td>
                 <td>
                   {order.name}
                   <br />
@@ -103,40 +90,44 @@ const Orders = () => {
                   ))}
                 </td>
                 <td className="px-4">
-                  {order?.line_items?.[0]?.OrderState?.length === 0 ? (
+                  {order?.orderState.length > 1 &&
+                  order?.orderState?.[2]?.state != "Confirm" &&
+                  order?.orderState?.[2]?.state != "Rejected" ? (
                     <div className="flex flex-row justify-between px-4">
                       <button
                         onClick={() => confirmYes(index1)}
                         type="button"
                         className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
                       >
-                        Yes
-                      </button>
-                      <button
-                        onClick={() => confirmNo(index1)}
-                        type="button"
-                        className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                      >
-                        No
+                        Pick The Order
                       </button>
                     </div>
                   ) : (
                     <>
-                      {order.orderState[0].state == "Confirm" ? (
+                      {order?.orderState?.length > 1 &&
+                      order.orderState[2].state == "Confirm" ? (
                         <div className=" grid place-items-center">
-                          <p>Order Confirm</p>
-                          <div className="fixed top-[-200vh] right-[-100vh]">
-                            {" "}
-                            <Invoice {...order} ref={componentRef} />
-                          </div>
-
-                          <button
-                            type="button"
-                            className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
-                            onClick={() => handlePrint()}
-                          >
-                            Print Invoice
-                          </button>
+                          <p>
+                            Order Pick On{" "}
+                            {new Date(
+                              order.orderState[2].date
+                            ).toLocaleDateString()}{" "}
+                            {new Date(
+                              order.orderState[1].date
+                            ).toLocaleTimeString()}
+                          </p>
+                          {order?.orderState?.length > 2 &&
+                          (order?.orderState[3]?.state == "Confirm" ||order?.orderState[3]?.state == "Rejected") ? (
+                            <p>{order?.orderState[3]?.state == "Confirm"?"Order Delivered":"Order Cancel"} </p>
+                          ) : (
+                            <button
+                              onClick={() => confirmDelivered(index1)}
+                              type="button"
+                              className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
+                            >
+                              Delivered
+                            </button>
+                          )}
                         </div>
                       ) : (
                         <p className="w-full text-center">Order Rejected</p>
@@ -148,8 +139,8 @@ const Orders = () => {
             ))}
         </tbody>
       </table>
-    </Layout>
+    </div>
   );
 };
 
-export default Orders;
+export default Delivery;
