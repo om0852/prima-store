@@ -1,10 +1,7 @@
 import { signIn, signOut, useSession } from "next-auth/react";
-import { Inter } from "next/font/google";
-import Nav from "./components/Nav";
 import Layout from "./components/Layout";
 import { useState } from "react";
 
-const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const { data: session } = useSession();

@@ -1,8 +1,13 @@
 import client from "@/lib/db";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import axios from "axios";
 import NextAuth, { getServerSession } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-const adminEmails = ["omsaunke343@gmail.com"];
+
+let adminEmails = ["omsaunke343@gmail.com","salunkeom474@gmail.com","smartcoder0852@gmail.com"];
+
+// console.log("run");
+// adminFetcher();
 export const authOptions = {
   providers: [
     // OAuth authentication providers...
@@ -11,7 +16,7 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_SECRET,
     }),
   ],
-  adapter: MongoDBAdapter(client),
+  // adapter: MongoDBAdapter(client),
   callbacks: {
     session: ({ session, token, user }) => {
       if (adminEmails.includes(session?.user?.email)) {

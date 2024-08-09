@@ -19,12 +19,12 @@ const Orders = () => {
 
   useEffect(() => {
     axios
-      .get("/api/orders?search="+search+"&select="+selectOption)
+      .get("/api/orders?search=" + search + "&select=" + selectOption)
       .then((response) => {
         setOrderData(response.data);
       })
       .catch((err) => console.log(err));
-  }, [search,selectOption]);
+  }, [search, selectOption]);
 
   const confirmYes = (index) => {
     axios.post("/api/confirmorder", {
@@ -122,23 +122,26 @@ const Orders = () => {
                     </div>
                   ) : (
                     <>
-{         order.orderState=="Confirm"?           <div className=" grid place-items-center">
-                      <p>Order Confirm</p>
-                      <div className="fixed top-[-200vh] right-[-100vh]">
-                        {" "}
-                        <Invoice {...order} ref={componentRef} />
-                      </div>
+                      {order.orderState == "Confirm" ? (
+                        <div className=" grid place-items-center">
+                          <p>Order Confirm</p>
+                          <div className="fixed top-[-200vh] right-[-100vh]">
+                            {" "}
+                            <Invoice {...order} ref={componentRef} />
+                          </div>
 
-                      <button
-                        type="button"
-                        className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
-                        onClick={() => handlePrint()}
-                      >
-                        Print Invoice
-                      </button>
-                    </div>:<p className="w-full text-center">Order Rejected</p>
-}
-</>
+                          <button
+                            type="button"
+                            className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+                            onClick={() => handlePrint()}
+                          >
+                            Print Invoice
+                          </button>
+                        </div>
+                      ) : (
+                        <p className="w-full text-center">Order Rejected</p>
+                      )}
+                    </>
                   )}
                 </td>
               </tr>

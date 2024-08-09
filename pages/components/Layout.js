@@ -1,21 +1,50 @@
 import { signIn, signOut, useSession } from "next-auth/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Nav from "./Nav";
 import Logo from "./Logo";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const Layout = ({ children }) => {
   const { data: session } = useSession();
+  const router = useRouter();
   const [showNav, setShowNav] = useState(false);
+  useEffect(() => {
+    if (session) {
+      axios.get("/api/userchecker?email=" + session.user.email).then((res) => {
+       if(!res.data){
+        router.push("/login")
+       }
+        if (res?.data?.type == "Shipper") {
+          router.push("/shipper");
+        }
+        if (res.data.type == "Delivery") {
+          router.push("/delivery");
+        }
+      });
+    }
+  }, [session]);
   if (!session) {
     return (
       <div className="bg-customBg w-screen h-screen flex items-center">
         <div className="text-center w-full ">
           <button
-            onClick={() => signIn("google",{callbackUrl:"http://localhost:3000"})}
+            onClick={() =>
+              signIn("google")
+            }
             className="bg-blue-400 p-2 rounded-lg px-4"
           >
             {" "}
             Login With Google
+          </button>
+          <button
+            onClick={() =>
+              signOut()
+            }
+            className="bg-blue-400 p-2 rounded-lg px-4"
+          >
+            {" "}
+            Logout
           </button>
         </div>
       </div>
@@ -47,7 +76,7 @@ const Layout = ({ children }) => {
           </svg>
         </button>
         <div className="flex grow justify-center mr-6">
-        <Logo />
+          <Logo />
         </div>
       </div>
       <div className="flex h-screen" onClick={() => setShowNav(false)}>
