@@ -17,7 +17,7 @@ const Shipper = () => {
         setOrderData(response.data);
       })
       .catch((err) => console.log(err));
-    setLoader(true);
+    setLoader(false);
   };
 
   useEffect(() => {

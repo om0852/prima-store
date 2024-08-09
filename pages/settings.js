@@ -1,23 +1,28 @@
 import React, { useEffect, useState } from "react";
 import Layout from "./components/Layout";
 import axios from "axios";
+import Loader from "./components/Loader";
 
 const Settings = () => {
   const [email, setEmail] = useState("");
   const [type, setType] = useState("Admin");
   const [emailData, setEmailData] = useState([]);
   const [editAdminState, setAdminState] = useState(null);
+  const [loader, setLoader] = useState(false);
 
   const getUsers = () => {
+    setLoader(true);
     axios
       .get("/api/adduser")
       .then((res) => setEmailData(res.data))
       .catch((err) => console.log(err));
+    setLoader(false);
   };
   useEffect(() => {
     getUsers();
   }, []);
   const deleteAdmin = (id) => {
+    setLoader(true);
     axios.delete("/api/adduser?id=" + id);
     getUsers();
   };
@@ -27,6 +32,7 @@ const Settings = () => {
     setType(data.type);
   };
   const addAdmin = () => {
+    setLoader(true);
     if (editAdminState == null) {
       axios.post("/api/adduser", { email, type });
     } else {
@@ -37,7 +43,7 @@ const Settings = () => {
   };
   return (
     <Layout>
-      <h1>Admins</h1>
+      {loader && <Loader />} <h1>Admins</h1>
       <input
         type="email"
         value={email}
