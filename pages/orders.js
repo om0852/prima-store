@@ -10,20 +10,26 @@ const Orders = () => {
   const [selectOption, setSelectOption] = useState("All");
   const [search, setSearch] = useState("");
   const [loader, setLoader] = useState(false);
-  const componentRef = useRef();
+let printIndex
+  // Create an array of refs
+  const invoiceRefs = useRef([]);
 
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
+    content: () => invoiceRefs.current[printIndex],
     documentTitle: "Print This Document",
     onBeforePrint: () => console.log("before printing..."),
     onAfterPrint: () => console.log("after printing..."),
   });
+
+
   const fetchOrder = async () => {
     setLoader(true);
     axios
       .get("/api/orders?search=" + search + "&select=" + selectOption)
       .then((response) => {
         setOrderData(response.data);
+        // Create refs for each order
+        invoiceRefs.current = response.data.map((_, i) => invoiceRefs.current[i] ?? React.createRef());
       })
       .catch((err) => console.log(err));
     setLoader(false);
@@ -37,8 +43,8 @@ const Orders = () => {
     axios.post("/api/confirmorder", {
       data: { state: true, date: new Date() },
       id: orderData[index]._id,
-    });
-    fetchOrder();
+    }).then((res => { fetchOrder(); }
+    ));
   };
 
   const confirmNo = (index) => {
@@ -49,9 +55,14 @@ const Orders = () => {
     fetchOrder();
   };
 
+  const handlePrintInvoice = (index) => {
+    printIndex =(index);
+    handlePrint();
+  };
+
   return (
     <Layout>
-      {loader && <Loader />}{" "}
+      {loader && <Loader />}
       <div className="flex justify-between flex-row px-4">
         <h1>Orders</h1>
         <input
@@ -88,7 +99,9 @@ const Orders = () => {
               <tr key={index1}>
                 <td>{new Date(order.createdAt).toLocaleString()}</td>
                 <td className={order.paid ? "text-green-600" : "text-red-600"}>
-                  {order.paid ? "Yes" : "No"}
+                  {order.paid ? "Yes" : "No"}<br/>
+                  {order?.paymentType}
+                  {order._id}
                 </td>
                 <td>
                   {order.name}
@@ -132,18 +145,18 @@ const Orders = () => {
                     </div>
                   ) : (
                     <>
-                      {order.orderState[0].state == "Confirm" ? (
+                      {order?.orderState?.[0]?.state == "Confirm" ? (
                         <div className=" grid place-items-center">
                           <p>Order Confirm</p>
                           <div className="fixed top-[-200vh] right-[-100vh]">
                             {" "}
-                            <Invoice {...order} ref={componentRef} />
+                            <Invoice {...order} ref={rel =>invoiceRefs.current[index1]=rel} />
                           </div>
 
                           <button
                             type="button"
                             className="focus:outline-none text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
-                            onClick={() => handlePrint()}
+                            onClick={() => handlePrintInvoice(index1)}
                           >
                             Print Invoice
                           </button>

@@ -23,22 +23,26 @@ const Delivery = () => {
     fetchOrder();
   }, [search, selectOption]);
   const confirmYes = (index) => {
-    axios.post("/api/confirmdelivery", {
-      data: { state: true, date: new Date() },
-      id: orderData[index]._id,
-    });
-    fetchOrder();
+    axios
+      .post("/api/confirmdelivery", {
+        data: { state: true, date: new Date() },
+        id: orderData[index]._id,
+      })
+      .then((res) => fetchOrder());
+    // fetchOrder();
   };
   const confirmDelivered = (index) => {
-    axios.post("/api/confirmdelivery", {
-      data: { state: true, date: new Date() },
-      id: orderData[index]._id,
-    });
+    axios
+      .post("/api/confirmdelivery", {
+        data: { state: true, date: new Date() },
+        id: orderData[index]._id,
+      })
+      .then((res) => fetchOrder());
     fetchOrder();
   };
   return (
     <div>
-        {loader && <Loader/>}
+      {loader && <Loader />}
       <Header />
       <div className="flex justify-between flex-row px-4 py-4">
         <h1>Orders</h1>

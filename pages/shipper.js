@@ -24,11 +24,12 @@ const Shipper = () => {
     fetchOrder();
   }, [search, selectOption]);
   const confirmYes = (index) => {
-    axios.post("/api/confirmshipper", {
-      data: { state: true, date: new Date() },
-      id: orderData[index]._id,
-    });
-    fetchOrder();
+    axios
+      .post("/api/confirmshipper", {
+        data: { state: true, date: new Date() },
+        id: orderData[index]._id,
+      })
+      .then((res) => fetchOrder());
   };
   return (
     <div>
@@ -94,8 +95,8 @@ const Shipper = () => {
                   ))}
                 </td>
                 <td className="px-4">
-                  {(order?.orderState?.length== 1 &&
-                  order?.orderState?.[0]?.state == "Confirm" ) ? (
+                  {order?.orderState?.length == 1 &&
+                  order?.orderState?.[0]?.state == "Confirm" ? (
                     <div className="flex flex-row justify-between px-4">
                       <button
                         onClick={() => confirmYes(index1)}

@@ -16,6 +16,7 @@ const ModelSchema = new Schema({
     orderState:{type:[Object],default:[]},
     paid:{type:Boolean,default:false},
     order_id:String,
+    paymentType:String
 
 },{timestamps:true})
 
