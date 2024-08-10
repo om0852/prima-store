@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "./components/Layout";
 import axios from "axios";
 import Loader from "./components/Loader";
+import toast from "react-hot-toast";
 
 const Settings = () => {
   const [email, setEmail] = useState("");
@@ -10,9 +11,9 @@ const Settings = () => {
   const [editAdminState, setAdminState] = useState(null);
   const [loader, setLoader] = useState(false);
 
-  const getUsers = () => {
+  const getUsers = async () => {
     setLoader(true);
-    axios
+    await axios
       .get("/api/adduser")
       .then((res) => setEmailData(res.data))
       .catch((err) => console.log(err));
@@ -23,23 +24,27 @@ const Settings = () => {
   }, []);
   const deleteAdmin = (id) => {
     setLoader(true);
-    axios.delete("/api/adduser?id=" + id);
-    getUsers();
+    axios.delete("/api/adduser?id=" + id).then((res) => getUsers());
+    toast.success("user delete successfully");
   };
   const updateAdmin = (data) => {
     setAdminState(data);
     setEmail(data.email);
     setType(data.type);
+    toast.success("user update successfully");
   };
   const addAdmin = () => {
     setLoader(true);
     if (editAdminState == null) {
-      axios.post("/api/adduser", { email, type });
+      axios.post("/api/adduser", { email, type }).then((res) => getUsers());
     } else {
-      axios.put("/api/adduser?id=" + editAdminState._id, { email, type });
+      axios
+        .put("/api/adduser?id=" + editAdminState._id, { email, type })
+        .then((res) => getUsers());
     }
     getUsers();
     setAdminState(null);
+    toast.success("user add successfully");
   };
   return (
     <Layout>

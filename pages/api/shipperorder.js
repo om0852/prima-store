@@ -9,16 +9,28 @@ export default async function handler(req, res) {
     order._id.toString().includes(search)
   );
   filteredOrders = orders.filter((order) => {
-    if (order.orderState[0].state == "Confirm") {
+    if (order?.orderState?.[0]?.state == "Confirm") {
       return order;
     }
   });
   if (select == "All") {
     res.json(filteredOrders);
   } else {
-    const newFilterData = filteredOrders.filter(
-      (order) => order.orderState[1].state == select
-    );
+    let newFilterData
+    if (select == "Confirm") {
+       newFilterData = filteredOrders.filter((order) => {
+        if (order?.orderState?.[1]?.state == "Confirm") {
+          return order;
+        }
+      });
+    }
+    else{
+      newFilterData = filteredOrders.filter((order) => {
+        if (order?.orderState?.[1]?.state != "Confirm") {
+          return order;
+        }
+      });
+    }
 
     // Send the response
     res.json(newFilterData);

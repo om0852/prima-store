@@ -2,6 +2,7 @@ import Layout from "@/pages/components/Layout";
 import axios from "axios";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 const DeleteProductPage = () => {
   const router = useRouter();
@@ -18,15 +19,25 @@ const DeleteProductPage = () => {
   function getBack() {
     router.push("/products");
   }
-  async function deleteProduct(){
-  await axios.delete("/api/products?id="+id).then(res=>router.push("/products"));
+  async function deleteProduct() {
+    await axios
+      .delete("/api/products?id=" + id)
+      .then((res) => router.push("/products"))
+      .toast.success("Product Deleted");
   }
   return (
     <Layout>
-      <h1 className="text-center"> Do You really want to delete &quot;{productInfo?.title}&quot;</h1>
+      <h1 className="text-center">
+        {" "}
+        Do You really want to delete &quot;{productInfo?.title}&quot;
+      </h1>
       <div className="flex gap-2 justify-center">
-        <button onClick={deleteProduct} className="btn-red">Yes</button>
-        <button className="btn-default" onClick={getBack}>No</button>
+        <button onClick={deleteProduct} className="btn-red">
+          Yes
+        </button>
+        <button className="btn-default" onClick={getBack}>
+          No
+        </button>
       </div>
     </Layout>
   );

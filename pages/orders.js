@@ -10,7 +10,7 @@ const Orders = () => {
   const [selectOption, setSelectOption] = useState("All");
   const [search, setSearch] = useState("");
   const [loader, setLoader] = useState(false);
-let printIndex
+  let printIndex;
   // Create an array of refs
   const invoiceRefs = useRef([]);
 
@@ -21,7 +21,6 @@ let printIndex
     onAfterPrint: () => console.log("after printing..."),
   });
 
-
   const fetchOrder = async () => {
     setLoader(true);
     axios
@@ -29,7 +28,9 @@ let printIndex
       .then((response) => {
         setOrderData(response.data);
         // Create refs for each order
-        invoiceRefs.current = response.data.map((_, i) => invoiceRefs.current[i] ?? React.createRef());
+        invoiceRefs.current = response.data.map(
+          (_, i) => invoiceRefs.current[i] ?? React.createRef()
+        );
       })
       .catch((err) => console.log(err));
     setLoader(false);
@@ -40,11 +41,14 @@ let printIndex
   }, [search, selectOption]);
 
   const confirmYes = (index) => {
-    axios.post("/api/confirmorder", {
-      data: { state: true, date: new Date() },
-      id: orderData[index]._id,
-    }).then((res => { fetchOrder(); }
-    ));
+    axios
+      .post("/api/confirmorder", {
+        data: { state: true, date: new Date() },
+        id: orderData[index]._id,
+      })
+      .then((res) => {
+        fetchOrder();
+      });
   };
 
   const confirmNo = (index) => {
@@ -56,7 +60,7 @@ let printIndex
   };
 
   const handlePrintInvoice = (index) => {
-    printIndex =(index);
+    printIndex = index;
     handlePrint();
   };
 
@@ -99,9 +103,9 @@ let printIndex
               <tr key={index1}>
                 <td>{new Date(order.createdAt).toLocaleString()}</td>
                 <td className={order.paid ? "text-green-600" : "text-red-600"}>
-                  {order.paid ? "Yes" : "No"}<br/>
-                  {order?.paymentType}
-                  {order._id}
+                  Payment Status:{order.paid ? "Paid" : "Unpaid"}
+                  <br />
+                  PaymentType:{order?.paymentType}
                 </td>
                 <td>
                   {order.name}
@@ -150,7 +154,10 @@ let printIndex
                           <p>Order Confirm</p>
                           <div className="fixed top-[-200vh] right-[-100vh]">
                             {" "}
-                            <Invoice {...order} ref={rel =>invoiceRefs.current[index1]=rel} />
+                            <Invoice
+                              {...order}
+                              ref={(rel) => (invoiceRefs.current[index1] = rel)}
+                            />
                           </div>
 
                           <button

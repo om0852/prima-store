@@ -19,9 +19,12 @@ const Categories = () => {
         id: editState._id,
         properties:properties
       });
-      
+      toast.success("Category Updated")
+
     } else {
       await axios.post("/api/categories", { name, parentcategory, properties:properties });
+      toast.success("Category Added")
+
     }
     setEditState(null);
     setCategories([]);
@@ -35,6 +38,8 @@ const Categories = () => {
     if (result) {
       await axios.delete("/api/categories?id=" + id);
       getCategory();
+      toast.success("Category Deleted")
+
     }
   };
   const getCategory = async () => {

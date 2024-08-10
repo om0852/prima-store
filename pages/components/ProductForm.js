@@ -5,6 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Spinner from "./Spinner";
 import { ReactSortable } from "react-sortablejs";
+import toast from "react-hot-toast";
 
 const ProductForm = ({
   title: existingTitle,
@@ -51,6 +52,8 @@ const ProductForm = ({
         delivery_charges,
         properties: productProperties,
       });
+      toast.success("Product Updated")
+
     } else {
       await axios.post(`/api/products`, {
         title,
@@ -61,6 +64,7 @@ const ProductForm = ({
         delivery_charges,
         properties: productProperties,
       });
+      toast.success("Product Added")
     }
     setGoToProducts(true);
   };

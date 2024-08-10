@@ -11,6 +11,8 @@ const Invoice = forwardRef(({
   code,
   number,
   line_items,
+  paid,
+  paymentType
 }, ref) => {
   let qty = 0;
   let total = 0;
@@ -73,6 +75,8 @@ const Invoice = forwardRef(({
           </tr>
         </tbody>
       </table>
+      <div className="mt-4 mb-4"><span className="text-xl font-medium mt-20">Payment Status:</span>{paid?"Completed":"Pending"}</div>
+      <div><span className="text-xl font-medium mt-20">Payment Type:</span>{paymentType}</div>
     </div>
   );
 });

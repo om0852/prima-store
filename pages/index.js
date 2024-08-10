@@ -5,10 +5,10 @@ import axios from "axios";
 
 export default function Home() {
   const { data: session } = useSession();
-  const [dashboardData,setDashboardData]=useState(null)
-  useEffect(()=>{
-axios.get("/api/dashboard").then((res)=>setDashboardData(res.data))
-  },[])
+  const [dashboardData, setDashboardData] = useState(null);
+  useEffect(() => {
+    axios.get("/api/dashboard").then((res) => setDashboardData(res.data));
+  }, []);
   return (
     <Layout>
       <div className="text-blue-900 flex justify-between">
@@ -25,31 +25,28 @@ axios.get("/api/dashboard").then((res)=>setDashboardData(res.data))
           <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             Todays Total Order
           </h5>
-          
+
           <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-{dashboardData?.today}
+            {dashboardData?.today}
           </h5>
-          
         </div>
         <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
           <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             Yesterday Total Order
           </h5>
-          
+
           <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-{dashboardData?.yesterday}
+            {dashboardData?.yesterday}
           </h5>
-          
         </div>
         <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
           <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
             This Month Total Order
           </h5>
-          
+
           <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-{dashboardData?.month}
+            {dashboardData?.month}
           </h5>
-          
         </div>
       </div>
     </Layout>

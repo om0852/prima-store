@@ -4,6 +4,7 @@ import Nav from "./Nav";
 import Logo from "./Logo";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { Toaster } from "react-hot-toast";
 
 const Layout = ({ children }) => {
   const { data: session } = useSession();
@@ -53,6 +54,8 @@ const Layout = ({ children }) => {
 
   return (
     <div className="bg-gray-100 text-black min-h-screen h-screen">
+            <Toaster/>
+
       <div className="h-10  flex flex-row justify-center items-center md:hidden">
         <button
           onClick={() => {

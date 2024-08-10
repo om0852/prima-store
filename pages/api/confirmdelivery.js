@@ -31,19 +31,23 @@ export default async function handler(req, res) {
     let orderData = await Order.findOne({ _id: id });
     orderData.line_items.map((obj) => obj.OrderState.push(data));
     // console.log(orderData.line_items);
-    if (orderData.orderState.length> 1) {
+    if (orderData.orderState.length > 1) {
       orderData.orderState.push({
         state: data.state ? "Confirm" : "Rejected",
         date: new Date(),
       });
     }
-    if(orderData.paid==false && orderData.orderState.length==3){
-      orderData.paid=true
+    if (orderData.paid == false && orderData.orderState.length == 3) {
+      orderData.paid = true;
     }
     const updatedOrder = await Order.findByIdAndUpdate(
       { _id: id },
-      { line_items: orderData.line_items, orderState: orderData.orderState,paid:orderData.paid },
-      { new: true },
+      {
+        line_items: orderData.line_items,
+        orderState: orderData.orderState,
+        paid: orderData.paid,
+      },
+      { new: true }
     );
     // console.log('Order updated:', updatedOrder);
     if (orderData.orderState.length == 3) {

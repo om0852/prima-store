@@ -60,7 +60,6 @@ const Delivery = () => {
         >
           <option value={"All"}>All</option>
           <option value={"Confirm"}>Confirm</option>
-          <option value={"Rejected"}>Rejected</option>
           <option value={"Pending"}>Pending</option>
         </select>
       </div>
