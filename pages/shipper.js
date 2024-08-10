@@ -94,9 +94,8 @@ const Shipper = () => {
                   ))}
                 </td>
                 <td className="px-4">
-                  {order?.orderState.length > 0 &&
-                  order?.orderState?.[1]?.state != "Confirm" &&
-                  order?.orderState?.[1]?.state != "Rejected" ? (
+                  {(order?.orderState?.length== 1 &&
+                  order?.orderState?.[0]?.state == "Confirm" ) ? (
                     <div className="flex flex-row justify-between px-4">
                       <button
                         onClick={() => confirmYes(index1)}
@@ -109,7 +108,7 @@ const Shipper = () => {
                   ) : (
                     <>
                       {order?.orderState?.length > 0 &&
-                      order.orderState[1].state == "Confirm" ? (
+                      order?.orderState[1]?.state == "Confirm" ? (
                         <div className=" grid place-items-center">
                           <p>
                             Order Pick On{" "}

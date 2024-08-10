@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     order._id.toString().includes(search)
   );
   filteredOrders = orders.filter((order) => {
-    if (order.orderState.length > 0) {
+    if (order.orderState[0].state=="Confirm") {
       return order;
     }
   });
