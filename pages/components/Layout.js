@@ -13,7 +13,7 @@ const Layout = ({ children }) => {
   useEffect(() => {
     if (session) {
       axios.get("/api/userchecker?email=" + session.user.email).then((res) => {
-       if(!res.data){
+       if(res==null){
          signOut();
         router.push("/login")
        }
