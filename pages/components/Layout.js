@@ -14,6 +14,7 @@ const Layout = ({ children }) => {
     if (session) {
       axios.get("/api/userchecker?email=" + session.user.email).then((res) => {
        if(!res.data){
+         signOut();
         router.push("/login")
        }
         if (res?.data?.type == "Shipper") {
