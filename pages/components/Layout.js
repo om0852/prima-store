@@ -10,28 +10,28 @@ import Loader from "./Loader";
 const Layout = ({ children }) => {
   const { data: session } = useSession();
   const router = useRouter();
-  const [loader, setLoader ] = useState(false);
+  const [loader, setLoader] = useState(false);
   const [showNav, setShowNav] = useState(false);
   useEffect(() => {
-    if (session) {
-      setLoader(true);
-      axios.get("/api/userchecker?email=" + session.user.email).then((res) => {
-        console.log("res", res);
-        if (res.data == null) {
-          signOut();
-          router.push("/login");
-        }
-        if (res?.data?.type == "Shipper") {
-          router.push("/shipper");
-        }
-        if (res.data.type == "Delivery") {
-          router.push("/delivery");
-        }
-      });
-      setLoader(false);
-    }
+    // if (session) {
+    //   setLoader(true);
+    //   axios.get("/api/userchecker?email=" + session.user.email).then((res) => {
+    //     console.log("res", res);
+    //     if (res.data == null) {
+    //       signOut();
+    //       router.push("/login");
+    //     }
+    //     if (res?.data?.type == "Shipper") {
+    //       router.push("/shipper");
+    //     }
+    //     if (res.data.type == "Delivery") {
+    //       router.push("/delivery");
+    //     }
+    //   });
+    //   setLoader(false);
+    // }
   }, [session]);
-  if (!session) {
+  if (session==0) {
     return (
       <div className="bg-customBg w-screen h-screen flex items-center">
         {loader && <Loader />}{" "}

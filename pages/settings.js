@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 
 const Settings = () => {
   const [email, setEmail] = useState("");
+  const [bannerId,setBannerId]=useState("")
   const [type, setType] = useState("Admin");
   const [emailData, setEmailData] = useState([]);
   const [editAdminState, setAdminState] = useState(null);
@@ -46,9 +47,28 @@ const Settings = () => {
     setAdminState(null);
     toast.success("user add successfully");
   };
+  const changeBanner=()=>{
+    axios.post("/api/banner",{id:bannerId});
+    toast.success("banner added");
+  }
   return (
     <Layout>
-      {loader && <Loader />} <h1>Admins</h1>
+      {loader && <Loader />} 
+      <h1>Change Banner</h1>
+      <input
+        type="text"
+        value={bannerId}
+        onChange={(e) => setBannerId(e.target.value)}
+        placeholder="Enter Banner Id"
+      />
+           <button
+        onClick={() => changeBanner()}
+        type="button"
+        class="focus:outline-none text-white bg-yellow-400 hover:bg-yellow-500 focus:ring-4 focus:ring-yellow-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:focus:ring-yellow-900"
+      >
+        Change
+      </button>
+      <h1>Admins</h1>
       <input
         type="email"
         value={email}
