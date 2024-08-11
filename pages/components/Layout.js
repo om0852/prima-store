@@ -5,19 +5,22 @@ import Logo from "./Logo";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Toaster } from "react-hot-toast";
+import Loader from "./Loader";
 
 const Layout = ({ children }) => {
   const { data: session } = useSession();
   const router = useRouter();
+  const { loader, setLoader } = useState(false);
   const [showNav, setShowNav] = useState(false);
   useEffect(() => {
     if (session) {
+      setLoader(true);
       axios.get("/api/userchecker?email=" + session.user.email).then((res) => {
-        console.log("res",res)
-       if(res.data==null){
-         signOut();
-        router.push("/login")
-       }
+        console.log("res", res);
+        if (res.data == null) {
+          signOut();
+          router.push("/login");
+        }
         if (res?.data?.type == "Shipper") {
           router.push("/shipper");
         }
@@ -25,25 +28,23 @@ const Layout = ({ children }) => {
           router.push("/delivery");
         }
       });
+      setLoader(false);
     }
   }, [session]);
   if (!session) {
     return (
       <div className="bg-customBg w-screen h-screen flex items-center">
+        {loader && <Loader />}{" "}
         <div className="text-center w-full ">
           <button
-            onClick={() =>
-              signIn("google")
-            }
+            onClick={() => signIn("google")}
             className="bg-blue-400 p-2 rounded-lg px-4"
           >
             {" "}
             Login With Google
           </button>
           <button
-            onClick={() =>
-              signOut()
-            }
+            onClick={() => signOut()}
             className="bg-blue-400 p-2 rounded-lg px-4"
           >
             {" "}
@@ -56,7 +57,7 @@ const Layout = ({ children }) => {
 
   return (
     <div className="bg-gray-100 text-black min-h-screen h-screen">
-            <Toaster/>
+      <Toaster />
 
       <div className="h-10  flex flex-row justify-center items-center md:hidden">
         <button
