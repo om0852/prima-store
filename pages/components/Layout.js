@@ -10,7 +10,7 @@ import Loader from "./Loader";
 const Layout = ({ children }) => {
   const { data: session } = useSession();
   const router = useRouter();
-  const { loader, setLoader } = useState(false);
+  const [loader, setLoader ] = useState(false);
   const [showNav, setShowNav] = useState(false);
   useEffect(() => {
     if (session) {
